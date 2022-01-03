@@ -1,75 +1,274 @@
-import React from 'react'
-import { SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { SafeAreaView } from 'react-native'
 import { Feather } from '@expo/vector-icons'
-import { ListItem } from 'react-native-elements'
 import { Icon } from 'native-base'
 import { globalStyles } from '../../../../styles/global'
 import FocusAwareStatusBar from '../../../shared/navigation/FocusAwareStatusBar'
-import { Divider } from 'native-base'
 import Avatar from '../../../components/ui-components/Avatar'
-import { View, Box, Pressable, Text } from 'native-base'
+import { getValueFor } from '../../../shared/UserAuthentication'
+import axios from 'axios'
+import {
+    View,
+    Box,
+    Text,
+    Stack,
+    VStack,
+    HStack,
+    Center,
+    ScrollView,
+    Pressable,
+    Badge,
+} from 'native-base'
 import { settingStyles } from '../../../../styles/profileStyles'
-
+import C_Button from '../../../components/ui-components/Button'
+import WidgetCard from '../../../components/ui-components/cards/WidgetCard'
 const Setting = ({ route, navigation }) => {
     const { userProfile } = route.params
+    const [sellerRequest, setSellerRequest] = useState(null)
+    useEffect(() => {
+        checkSellerRequest()
+    }, [])
+
+    const checkSellerRequest = async () => {
+        const token = await getValueFor('jwtToken')
+        const currentUserId = await getValueFor('currentUserId')
+        const response = await axios({
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                authorization: `Bearer ${token}`,
+            },
+            method: 'get',
+            url: `http://192.168.0.9:3001/user/seller-request/${currentUserId}`,
+        })
+            .then(function (response) {
+                setSellerRequest(response.data.sellerRequest)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
     const navigationHandler = () => {
         navigation.navigate('EditAccount', { userProfile: userProfile })
     }
     return (
         <SafeAreaView style={[globalStyles.container]}>
-            <ScrollView>
+            <ScrollView {...settingStyles.container}>
                 <FocusAwareStatusBar
                     barStyle="dark-content"
                     backgroundColor="#ecf0f1"
                 />
                 <View {...settingStyles.container}>
-                    <Box {...settingStyles.profileHeader}>
-                        <View {...settingStyles.avatarContainer}>
-                            <Avatar size="lg" avatarUrl={userProfile.avatar} />
-                        </View>
-                        <View {...settingStyles.userInfoContainer}>
-                            <Text {...settingStyles.displayName}>
-                                {userProfile.displayName}
-                            </Text>
-                            <Text {...settingStyles.username}>
-                                @{userProfile.username}
-                            </Text>
-                            <Text {...settingStyles.bio}>
-                                {userProfile.bio}
-                            </Text>
-                        </View>
-                    </Box>
+                    <Pressable onPress={navigationHandler}>
+                        <Box {...settingStyles.profileHeader}>
+                            <View {...settingStyles.avatarContainer}>
+                                <Avatar
+                                    size="lg"
+                                    avatarUrl={userProfile.avatar}
+                                />
+                            </View>
+                            <View {...settingStyles.userInfoContainer}>
+                                <Text {...settingStyles.displayName}>
+                                    {userProfile.displayName}
+                                </Text>
+                                <Text {...settingStyles.username}>
+                                    @{userProfile.username}
+                                </Text>
+                                <Text {...settingStyles.bio}>
+                                    {userProfile.bio}
+                                </Text>
+                            </View>
+                        </Box>
+                    </Pressable>
+
                     {userProfile.isVerified ? null : (
-                        <Text {...settingStyles.dangerText}>
+                        <Text ml={5} color="danger.500">
                             Please verify your account
                         </Text>
                     )}
                 </View>
 
-                <View {...settingStyles.listContainer}>
-                    <Divider {...settingStyles.divider} />
-                    <Text {...settingStyles.listDividerText}> Dashboard </Text>
-                    <Pressable onPress={navigationHandler}>
-                        <ListItem
-                            containerStyle={settingStyles.listenItemContainer}
-                        >
-                            <View {...settingStyles.iconContainer}>
-                                <Icon
-                                    as={Feather}
-                                    name="user"
-                                    size={8}
-                                    color={settingStyles.iconColor.color}
+                <View height={'50px'} mx="3" mt="3">
+                    <ScrollView
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                        bgColor={'white'}
+                    >
+                        <Stack>
+                            <HStack space={3}>
+                                <C_Button
+                                    leftIcon={
+                                        <Icon
+                                            as={Feather}
+                                            size={4}
+                                            name="inbox"
+                                        />
+                                    }
+                                    color="warning"
+                                    w="125px"
+                                    title="Inbox"
                                 />
-                            </View>
+                                <C_Button
+                                    leftIcon={
+                                        <Icon
+                                            as={Feather}
+                                            size={4}
+                                            name="moon"
+                                        />
+                                    }
+                                    color="indigo"
+                                    w="125px"
+                                    title="Status"
+                                />
+                                <C_Button
+                                    leftIcon={
+                                        <Icon
+                                            as={Feather}
+                                            size={4}
+                                            name="eye"
+                                        />
+                                    }
+                                    color="light"
+                                    w="125px"
+                                    title="Appearance"
+                                />
+                                <C_Button
+                                    leftIcon={
+                                        <Icon
+                                            as={Feather}
+                                            size={4}
+                                            name="share"
+                                        />
+                                    }
+                                    color="tertiary"
+                                    w="125px"
+                                    title="Share"
+                                />
+                            </HStack>
+                        </Stack>
+                    </ScrollView>
+                </View>
+                <View {...settingStyles.widgetBoxesContainer}>
+                    <Stack space={3} alignItems="center">
+                        {userProfile.isSeller ? (
+                            <VStack space={3} alignItems="center">
+                                <HStack space={5} alignItems="center">
+                                    <WidgetCard
+                                        bgColor={'primary.500'}
+                                        icon={
+                                            <Icon
+                                                as={Feather}
+                                                name="bar-chart-2"
+                                                color="#fff"
+                                            />
+                                        }
+                                    />
+                                    <WidgetCard
+                                        bgColor={'primary.500'}
+                                        icon={
+                                            <Icon
+                                                as={Feather}
+                                                name="shopping-bag"
+                                                color="#fff"
+                                            />
+                                        }
+                                        onPress={() =>
+                                            navigation.navigate(
+                                                'CreateUserShop'
+                                            )
+                                        }
+                                    />
+                                    <WidgetCard
+                                        bgColor={'primary.500'}
+                                        icon={
+                                            <Icon
+                                                as={Feather}
+                                                name="truck"
+                                                color="#fff"
+                                            />
+                                        }
+                                    />
+                                </HStack>
+                            </VStack>
+                        ) : null}
 
-                            <ListItem.Content>
-                                <ListItem.Title style={settingStyles.listItem}>
-                                    Account
-                                </ListItem.Title>
-                            </ListItem.Content>
-                            <ListItem.Chevron />
-                        </ListItem>
-                    </Pressable>
+                        <VStack space={3} alignItems="center">
+                            <HStack space={5} alignItems="center">
+                                <WidgetCard
+                                    bgColor={'primary.500'}
+                                    icon={
+                                        <Icon
+                                            as={Feather}
+                                            name="settings"
+                                            color="#fff"
+                                        />
+                                    }
+                                />
+                                <WidgetCard
+                                    bgColor={'primary.500'}
+                                    icon={
+                                        <Icon
+                                            as={Feather}
+                                            name="headphones"
+                                            color="#fff"
+                                        />
+                                    }
+                                />
+                                <WidgetCard
+                                    bgColor={'primary.500'}
+                                    icon={
+                                        <Icon
+                                            as={Feather}
+                                            name="info"
+                                            color="#fff"
+                                        />
+                                    }
+                                />
+                            </HStack>
+                            {!sellerRequest ? (
+                                <HStack space={5} alignItems="center" mt={10}>
+                                    <C_Button
+                                        title="Become A Merchant!"
+                                        size="lg"
+                                        leftIcon={
+                                            <Icon
+                                                as={Feather}
+                                                name="shopping-bag"
+                                                size={5}
+                                            />
+                                        }
+                                        onPress={() =>
+                                            navigation.navigate('SellerRequest')
+                                        }
+                                    />
+                                </HStack>
+                            ) : !sellerRequest.isApproved ? (
+                                <HStack space={5} alignItems="center" mt={10}>
+                                    <Badge colorScheme="warning">
+                                        Your Merchant request is still been
+                                        processed.
+                                    </Badge>
+                                </HStack>
+                            ) : sellerRequest.isApproved &&
+                              userProfile.isSeller == false ? (
+                                <VStack space={5} alignItems="center" mt={10}>
+                                    <Badge colorScheme="tertiary">
+                                        Congratulations! You're now a Merchant!
+                                    </Badge>
+
+                                    <C_Button
+                                        title="Setup Shop!"
+                                        size="lg"
+                                        onPress={() =>
+                                            navigation.navigate(
+                                                'CreateUserShop'
+                                            )
+                                        }
+                                    />
+                                </VStack>
+                            ) : null}
+                        </VStack>
+                    </Stack>
                 </View>
             </ScrollView>
         </SafeAreaView>

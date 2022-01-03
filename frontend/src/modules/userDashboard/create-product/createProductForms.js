@@ -160,7 +160,7 @@ const ProductInformationForm = ({ props }) => {
 
 const SelectImagesForm = ({ props }) => {
     const _getHeaderLoader = () => (
-        <ActivityIndicator size="small" color={'#0580FF'} />
+        <ActivityIndicator size="small" color={'primary.500'} />
     )
     const imagesCallback = (callback) => {
         props.navigation.setOptions({
@@ -174,10 +174,15 @@ const SelectImagesForm = ({ props }) => {
                     const productPhotoInfo = await _processImageAsync(
                         productPhoto.uri
                     )
+
+                    const { newProductPhotoSize } = await getFileInfo(
+                        productPhotoInfo.uri
+                    )
                     cProductPhotos.push({
-                        productPreviewURI: productPhotoInfo.uri,
-                        productFileName: productPhoto.filename,
-                        type: 'image/jpg',
+                        name: productPhoto.filename,
+                        size: newProductPhotoSize,
+                        uri: productPhotoInfo.uri,
+                        type: 'application/' + 'image/png',
                     })
                 }
 
@@ -195,12 +200,13 @@ const SelectImagesForm = ({ props }) => {
         const file = await ImageManipulator.manipulateAsync(
             uri,
             [{ resize: { width: 1000 } }],
-            { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG }
+            { compress: 0.8, format: ImageManipulator.SaveFormat.PNG }
         )
         return file
     }
     const _renderDoneButton = (count, onSubmit) => {
         if (!count) return null
+
         return (
             <TouchableOpacity onPress={onSubmit}>
                 <Text color="primary.500" fontWeight={'700'} mr={5}>
@@ -218,8 +224,24 @@ const SelectImagesForm = ({ props }) => {
     }
 
     const renderSelectedComponent = (number) => (
-        <View style={imageSelectorStyles.countBadge}>
-            <Text style={imageSelectorStyles.countBadgeText}>{number}</Text>
+        <View
+            px={8.6}
+            py={1}
+            borderRadius={5}
+            position={'absolute'}
+            right={3}
+            bottom={3}
+            justifyContent={'center'}
+            bgColor="primary.500"
+        >
+            <Text
+                fontWeight={'700'}
+                alignSelf={'center'}
+                p={'auto'}
+                color={'#fff'}
+            >
+                {number}
+            </Text>
         </View>
     )
 

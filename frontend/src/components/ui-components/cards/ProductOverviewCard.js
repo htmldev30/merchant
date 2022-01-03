@@ -26,9 +26,9 @@ const ProductOverviewCard = ({
             <AspectRatio w="100%" ratio={9 / 9}>
                 <Image
                     source={{
-                        uri: item.productPreviewURI,
+                        uri: item.uri,
                     }}
-                    key={item.productFileName}
+                    key={item.name}
                     alt="product_image"
                 />
             </AspectRatio>

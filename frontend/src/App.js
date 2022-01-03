@@ -8,8 +8,16 @@ function App() {
         colors: {
             // Add new color
             primary: {
-                500: '#000',
-                700: '#3f3f3f', // button hover color
+                100: '#525252',
+                200: '#3d3d3d',
+                300: '#3f3f3f',
+                400: '#141414',
+                500: '#000000',
+                600: '#000000',
+                700: '#000000',
+                800: '#000000',
+                900: '#000000',
+                // button hover color
             },
             text: {
                 500: '#000',
@@ -33,10 +41,10 @@ function App() {
                 500: '#3f3f3f',
             },
         },
-        config: {
-            // Changing initialColorMode to 'dark'
-            initialColorMode: 'dark',
-        },
+        // config: {
+        //     // Changing initialColorMode to 'dark'
+        //     initialColorMode: 'dark',
+        // },
     })
     return (
         <NativeBaseProvider theme={theme}>

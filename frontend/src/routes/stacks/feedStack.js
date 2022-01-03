@@ -5,7 +5,7 @@ const FeedStack = createStackNavigator()
 export const FeedStackScreens = () => {
     return (
         <FeedStack.Navigator>
-            <FeedStack.Screen name="Feed" component={FeedScreen} />
+            <FeedStack.Screen name="Feed2" component={FeedScreen} />
         </FeedStack.Navigator>
     )
 }

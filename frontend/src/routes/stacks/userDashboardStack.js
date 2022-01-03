@@ -76,7 +76,7 @@ export const CreateProductScreens = () => {
             <createProductTabs.Screen
                 name="ReviewProductInformation"
                 component={ReviewProductInformationScreen}
-                options={{ title: 'Reivew Product Information' }}
+                options={{ title: 'Review Product ' }}
             />
         </createProductTabs.Navigator>
     )
@@ -85,11 +85,7 @@ export const CreateProductScreens = () => {
 export const UserDashboardScreens = () => {
     return (
         <NavigationContainer independent={true}>
-            <userDashboardStack.Navigator
-                screenOptions={{
-                    headerShown: false,
-                }}
-            >
+            <userDashboardStack.Navigator>
                 <userDashboardStack.Screen
                     name="Dashboard"
                     component={DashboardScreen}
@@ -97,7 +93,7 @@ export const UserDashboardScreens = () => {
                 <userDashboardStack.Screen
                     name="CreateProductScreens"
                     component={CreateProductScreens}
-                    options={{ title: 'New Product' }}
+                    options={{ headerShown: false }}
                 />
             </userDashboardStack.Navigator>
         </NavigationContainer>

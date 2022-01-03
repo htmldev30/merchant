@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useContext } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Icon } from 'native-base'
@@ -130,10 +131,12 @@ export default function Navigation() {
                 <Tab.Screen name="Feed" component={FeedStackScreens} />
                 <Tab.Screen name="Explore" component={ExploreStackScreens} />
                 <Tab.Screen name="Bag" component={BagStackScreens} />
+
                 <Tab.Screen
                     name="User Dashboard"
                     component={UserDashboardScreens}
                 />
+
                 <Tab.Screen name="Account" component={AccountStackScreens} />
             </Tab.Navigator>
         </NavigationContainer>

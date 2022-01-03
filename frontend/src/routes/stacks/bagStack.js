@@ -5,7 +5,7 @@ const BagStack = createStackNavigator()
 export const BagStackScreens = () => {
     return (
         <BagStack.Navigator>
-            <BagStack.Screen name="Bag" component={BagScreen} />
+            <BagStack.Screen name="Bag2" component={BagScreen} />
         </BagStack.Navigator>
     )
 }

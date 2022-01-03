@@ -18,7 +18,8 @@ C_Input.displayName = 'Input'
 
 const styles = {
     textInput: {
-        height: 45,
+        height: 50,
+        fontSize: 14,
         mb: 2,
         borderWidth: 2,
         borderRadius: 5,

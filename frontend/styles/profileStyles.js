@@ -95,7 +95,7 @@ export const settingStyles = {
     profileHeader: {
         flexDirection: 'row',
         alignItems: 'center',
-        pb: 8,
+        pb: 2,
         pl: 15,
         pr: 15,
         pt: 0,
@@ -123,34 +123,15 @@ export const settingStyles = {
         fontWeight: 'normal',
         color: 'secondary.500',
     },
-    divider: {
-        width: '100%',
-        height: 0.3,
-        bgColor: 'highlight.500',
-        mb: 15,
+    widgetBoxesContainer: {
+        px: 5,
+        py: 20,
+        bgColor: 'white',
     },
-    listDividerText: {
-        fontSize: 16,
-        ml: 3,
-        color: 'secondary.500',
-        fontWeight: 'normal',
-    },
-    listContainer: {
-        pb: 12,
-        bgColor: '#fff',
-    },
-    iconContainer: {
-        height: 12,
-        width: 12,
-        p: 2,
-        borderRadius: 8,
-        bgColor: 'highlight.500',
-    },
-    iconColor: {
-        color: 'primary.500',
-    },
-    dangerText: {
-        color: 'highlight.500',
-        ml: 20,
+    widgetBox: {
+        h: 20,
+        w: 20,
+        rounded: 'md',
+        shadow: 1,
     },
 }

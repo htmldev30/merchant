@@ -1,19 +1,13 @@
 import React from 'react'
-import { TouchableOpacity, Text, View } from 'react-native'
-import { Button } from 'native-base'
+import { Button, Spinner } from 'native-base'
 const C_Button = ({
     onPress,
     title,
-    backgroundColor,
-    size = 'md',
+    size = 'lg',
     color = 'primary',
-    leftIcon = false,
+    leftIcon,
     loading = false,
     loadingText,
-    icon,
-    transition,
-    disabled,
-    className = '',
     children,
     styles,
     ...props
@@ -24,9 +18,8 @@ const C_Button = ({
                 onPress={onPress}
                 size={size}
                 colorScheme={color}
-                leftIcon={leftIcon}
+                leftIcon={loading ? <Spinner color="white" /> : leftIcon}
                 {...props}
-                {...(loading ? (isLoadingText = loadingText) : false)}
             >
                 {title}
             </Button>

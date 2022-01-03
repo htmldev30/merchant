@@ -11,6 +11,7 @@ import { ConfigModule } from '@nestjs/config'
 // Customs
 import keys from '../config/keys'
 import { UserModule } from 'src/user/user.module'
+import { UserShopModule } from 'src/user-shop/user-shop.module'
 import { MinioClientModule } from '../minio-client/minio-client.module'
 
 @Module({
@@ -21,6 +22,7 @@ import { MinioClientModule } from '../minio-client/minio-client.module'
             useNewUrlParser: true,
         }),
         UserModule,
+        UserShopModule,
     ],
     controllers: [],
     providers: [],

@@ -84,6 +84,7 @@ const AuthenticationProvider = (props) => {
 
             return () => (mounted = false)
         } catch (error) {
+            console.log('post error')
             console.log(error.message)
         }
     }

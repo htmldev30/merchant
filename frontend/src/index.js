@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font'
 // Customs
 import { fonts } from '../styles/global'
 import { AuthenticationContext } from './hooks/context/AuthenticationProvider'
+import UserShopProvider from './hooks/context/UserShopProvider'
 import UserProfileProvider from './hooks/context/UserProfileProvider'
 // Components
 import Navigation from './routes/navigation'
@@ -18,7 +19,9 @@ export default function Index() {
         if (isAuthenticated) {
             return (
                 <UserProfileProvider>
-                    <Navigation />
+                    <UserShopProvider>
+                        <Navigation />
+                    </UserShopProvider>
                 </UserProfileProvider>
             )
         } else {

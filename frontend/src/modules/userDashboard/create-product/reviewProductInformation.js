@@ -1,8 +1,9 @@
 import React from 'react'
 import { SafeAreaView } from 'react-native'
 import { globalStyles } from '../../../../styles/global'
-import { View, Text, ScrollView } from 'native-base'
+import { View, Text, ScrollView, Badge, Center, Box } from 'native-base'
 import ProductOverviewCard from '../../../components/ui-components/cards/ProductOverviewCard'
+import SadGuySvg from '../../../../assets/svgs/Customs/SadGuy'
 export default ReviewProductInformation = (props) => {
     const productInformation = props.route.params
         ? props.route.params['productInformation']
@@ -27,9 +28,19 @@ export default ReviewProductInformation = (props) => {
                         />
                     </ScrollView>
                 ) : (
-                    <Text color="primary.500">
-                        No Product Information Provided
-                    </Text>
+                    <Center>
+                        <SadGuySvg
+                            width="400"
+                            height="275"
+                            style={{ margin: '15%' }}
+                        />
+                        <Badge
+                            colorScheme="danger"
+                            _text={{ color: 'danger.500' }}
+                        >
+                            Hmm, you have to provide more information.
+                        </Badge>
+                    </Center>
                 )}
             </View>
         </SafeAreaView>

@@ -23,6 +23,7 @@ export const UserProfileSchema = new mongoose.Schema({
     bio: {
         type: String,
         required: false,
+        default: '',
         maxlength: [64, 'Bio is too long'],
         trim: true,
     },
@@ -39,6 +40,10 @@ export const UserProfileSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
         required: true,
+    },
+    shopId: {
+        type: String,
+        required: false,
     },
     userId: {
         type: String,

@@ -1,0 +1,27 @@
+import React, { useContext } from 'react'
+import { SafeAreaView } from 'react-native'
+import { View } from 'native-base'
+import FocusAwareStatusBar from '../../../shared/navigation/FocusAwareStatusBar'
+import { globalStyles } from '../../../../styles/global'
+import CreateUserShopForm from './createUserShopForm.js'
+import { UserShopContext } from '../../../hooks/context/UserShopProvider'
+const CreateUserShop = ({ navigation }) => {
+    const { userShop, setUserShopUpdated } = useContext(UserShopContext)
+    return (
+        <SafeAreaView style={[globalStyles.container]}>
+            <View {...globalStyles.view_container}>
+                <FocusAwareStatusBar
+                    barStyle="dark-content"
+                    backgroundColor="#ecf0f1"
+                />
+                <CreateUserShopForm
+                    navigation={navigation}
+                    userShop={userShop}
+                    setUserShopUpdated={setUserShopUpdated}
+                />
+            </View>
+        </SafeAreaView>
+    )
+}
+
+export default CreateUserShop

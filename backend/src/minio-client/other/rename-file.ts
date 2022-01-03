@@ -12,7 +12,6 @@ const renameFile = (file) => {
     const metaData = {
         'Content-Type': file.mimetype,
     }
-
     return { extension, hashedFileName, metaData }
 }
 

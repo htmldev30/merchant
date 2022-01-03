@@ -95,11 +95,13 @@ const EditAccountForm = ({ userProfile, setUserUpdated, navigation }) => {
                 const token = await getValueFor('jwtToken')
                 const currentUserId = await getValueFor('currentUserId')
                 const allData = new FormData()
-                allData.append('profilePictureFile', selectedProfilePictureFile)
+                allData.append(
+                    'userProfilePictureFile',
+                    selectedProfilePictureFile
+                )
                 allData.append('username', username)
                 allData.append('displayName', displayName)
                 allData.append('bio', bio)
-                console.log(allData)
                 const response = await axios({
                     headers: {
                         'Content-Type': 'application/json',
