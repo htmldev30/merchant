@@ -30,6 +30,20 @@ export const profileStyles = {
         alignItems: 'center',
         width: '100%',
     },
+    shopHeader: {
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        elevation: 4,
+        bgColor: 'white',
+        px: 30,
+        py: 20,
+        pt: 65,
+        alignItems: 'center',
+        width: '100%',
+    },
     avatarContainer: {
         mb: 2,
     },
@@ -66,6 +80,11 @@ export const profileStyles = {
     dataPointText: {
         color: 'secondary.500',
         fontSize: 16,
+    },
+    shopSlogan: {
+        italic: true,
+        color: 'primary.500',
+        highlight: true,
     },
 }
 

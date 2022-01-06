@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react'
 import axios from 'axios'
+import { DeviceEventEmitter } from 'react-native'
+
 import { getValueFor } from '../../shared/UserAuthentication'
 
 export const UserShopContext = createContext()
@@ -11,7 +13,13 @@ const UserShopProvider = (props) => {
     // runs whenever userShop is updated | not relying on true or false
     useEffect(() => {
         getUserShop()
+        userShopUpdatedSubscription.remove()
     }, [userShopUpdated])
+
+    const userShopUpdatedSubscription = DeviceEventEmitter.addListener(
+        'userShopUpdated',
+        () => setUserShopUpdated(true)
+    )
 
     const getUserShop = async () => {
         try {
@@ -33,6 +41,7 @@ const UserShopProvider = (props) => {
                 .then(function (response) {
                     const userShop = response.data.userShop
                     setUserShop(userShop)
+                    setUserShopUpdated(false)
                 })
             return () => (mounted = false)
         } catch (error) {

@@ -7,7 +7,7 @@ import { Icon } from 'native-base'
 import { Feather } from '@expo/vector-icons'
 import { View, Text } from 'native-base'
 import * as ImagePicker from 'expo-image-picker'
-
+import { DeviceEventEmitter } from 'react-native'
 // Customs
 import { getValueFor } from '../../../shared/UserAuthentication'
 import { InputField } from '../../../components/form-fields/InputField'
@@ -17,11 +17,7 @@ import { getFileInfo } from '../../../shared/FileInformation'
 const EditAccountForm = ({ userProfile, setUserUpdated, navigation }) => {
     const [responseMessage, setResponseMessage] = useState(null)
     const [errors, setErrors] = useState(null)
-    const existingUserProfileValues = {
-        username: userProfile.username,
-        displayName: userProfile.displayName,
-        bio: userProfile.bio,
-    }
+
     const [selectedProfilePictureFile, setSelectedProfilePictureFile] =
         useState({
             profilePictureFile: undefined,
@@ -87,7 +83,11 @@ const EditAccountForm = ({ userProfile, setUserUpdated, navigation }) => {
             enableReinitialize={true}
             initialValues={
                 userProfile
-                    ? existingUserProfileValues
+                    ? {
+                          username: userProfile.username,
+                          displayName: userProfile.displayName,
+                          bio: userProfile.bio,
+                      }
                     : { username: '', displayName: '', bio: '' }
             }
             validationSchema={userProfileValidationSchema}
@@ -115,7 +115,8 @@ const EditAccountForm = ({ userProfile, setUserUpdated, navigation }) => {
                     .then(function (response) {
                         setResponseMessage(response.data.message)
                         setErrors(false)
-                        setUserUpdated(true)
+                        DeviceEventEmitter.emit('userUpdated')
+
                         navigationHandler()
                     })
                     .catch(function (error) {

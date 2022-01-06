@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react'
+import React, { forwardRef } from 'react'
 import { Input } from 'native-base'
 export const C_Input = forwardRef(
     ({ error, transparent, placeholder, ...props }, ref) => {

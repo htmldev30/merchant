@@ -23,7 +23,7 @@ import { settingStyles } from '../../../../styles/profileStyles'
 import C_Button from '../../../components/ui-components/Button'
 import WidgetCard from '../../../components/ui-components/cards/WidgetCard'
 const Setting = ({ route, navigation }) => {
-    const { userProfile } = route.params
+    const { userProfile, userShop } = route.params
     const [sellerRequest, setSellerRequest] = useState(null)
     useEffect(() => {
         checkSellerRequest()
@@ -83,7 +83,7 @@ const Setting = ({ route, navigation }) => {
 
                     {userProfile.isVerified ? null : (
                         <Text ml={5} color="danger.500">
-                            Please verify your account
+                            Email sent for Account Verification
                         </Text>
                     )}
                 </View>
@@ -96,6 +96,18 @@ const Setting = ({ route, navigation }) => {
                     >
                         <Stack>
                             <HStack space={3}>
+                                <C_Button
+                                    leftIcon={
+                                        <Icon
+                                            as={Feather}
+                                            size={4}
+                                            name="box"
+                                        />
+                                    }
+                                    color="emerald"
+                                    w="125px"
+                                    title="Orders"
+                                />
                                 <C_Button
                                     leftIcon={
                                         <Icon
@@ -174,7 +186,8 @@ const Setting = ({ route, navigation }) => {
                                         }
                                         onPress={() =>
                                             navigation.navigate(
-                                                'CreateUserShop'
+                                                'CreateUserShop',
+                                                { userShop: userShop }
                                             )
                                         }
                                     />
@@ -225,7 +238,8 @@ const Setting = ({ route, navigation }) => {
                                     }
                                 />
                             </HStack>
-                            {!sellerRequest ? (
+
+                            {userProfile.isVerified && !sellerRequest ? (
                                 <HStack space={5} alignItems="center" mt={10}>
                                     <C_Button
                                         title="Become A Merchant!"
@@ -242,15 +256,17 @@ const Setting = ({ route, navigation }) => {
                                         }
                                     />
                                 </HStack>
-                            ) : !sellerRequest.isApproved ? (
+                            ) : userProfile.isVerified &&
+                              !sellerRequest.isApproved ? (
                                 <HStack space={5} alignItems="center" mt={10}>
                                     <Badge colorScheme="warning">
                                         Your Merchant request is still been
                                         processed.
                                     </Badge>
                                 </HStack>
-                            ) : sellerRequest.isApproved &&
-                              userProfile.isSeller == false ? (
+                            ) : userProfile.isVerified &&
+                              sellerRequest.isApproved &&
+                              !userProfile.isSeller ? (
                                 <VStack space={5} alignItems="center" mt={10}>
                                     <Badge colorScheme="tertiary">
                                         Congratulations! You're now a Merchant!
@@ -261,7 +277,8 @@ const Setting = ({ route, navigation }) => {
                                         size="lg"
                                         onPress={() =>
                                             navigation.navigate(
-                                                'CreateUserShop'
+                                                'CreateUserShop',
+                                                { userShop: userShop }
                                             )
                                         }
                                     />

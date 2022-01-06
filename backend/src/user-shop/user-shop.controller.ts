@@ -90,17 +90,22 @@ export class UserShopController {
     ) {
         const { userShopProfilePictureFile, userShopProfileBannerFile } = files
 
-        const givenUserShopPictures = []
+        const givenUserShopPictures = [
+            { userShopProfilePictureFile: [], userShopProfileBannerFile: [] },
+        ]
         if (userShopProfilePictureFile) {
-            givenUserShopPictures.push(userShopProfilePictureFile[0])
+            givenUserShopPictures[0].userShopProfilePictureFile =
+                userShopProfilePictureFile
         }
         if (userShopProfileBannerFile) {
-            givenUserShopPictures.push(userShopProfileBannerFile[0])
+            givenUserShopPictures[0].userShopProfileBannerFile =
+                userShopProfileBannerFile
         }
         const updatedUserShop = await this.userShopService.updateUserShop(
             shopCreatorId,
             updateUserShopDto,
-            ...givenUserShopPictures,
+            givenUserShopPictures[0].userShopProfilePictureFile[0],
+            givenUserShopPictures[0].userShopProfileBannerFile[0],
         )
         if (updatedUserShop instanceof Error) {
             const formattedError = errorFormatter(updatedUserShop)

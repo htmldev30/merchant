@@ -1,9 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react'
 import axios from 'axios'
+import { DeviceEventEmitter } from 'react-native'
 import {
     checkAuthentication,
     getValueFor,
 } from '../../shared/UserAuthentication'
+
 export const UserProfileContext = createContext()
 
 const UserProfileProvider = (props) => {
@@ -11,12 +13,18 @@ const UserProfileProvider = (props) => {
     const [userProfile, setUserProfile] = useState([])
     const [userUpdated, setUserUpdated] = useState(false)
     useEffect(() => {
-        if (isAuthenticated || userUpdated) {
+        if (isAuthenticated) {
             //  ? check if UserProfile is null
 
             getUserProfile()
+            userUpdatedSubscription.remove()
         }
     }, [isAuthenticated, userUpdated])
+
+    const userUpdatedSubscription = DeviceEventEmitter.addListener(
+        'userUpdated',
+        () => setUserUpdated(true)
+    )
 
     const getUserProfile = async () => {
         try {

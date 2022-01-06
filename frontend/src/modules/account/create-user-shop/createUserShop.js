@@ -5,8 +5,8 @@ import FocusAwareStatusBar from '../../../shared/navigation/FocusAwareStatusBar'
 import { globalStyles } from '../../../../styles/global'
 import CreateUserShopForm from './createUserShopForm.js'
 import { UserShopContext } from '../../../hooks/context/UserShopProvider'
-const CreateUserShop = ({ navigation }) => {
-    const { userShop, setUserShopUpdated } = useContext(UserShopContext)
+const CreateUserShop = ({ route, navigation }) => {
+    const { userShop } = route.params
     return (
         <SafeAreaView style={[globalStyles.container]}>
             <View {...globalStyles.view_container}>
@@ -15,9 +15,8 @@ const CreateUserShop = ({ navigation }) => {
                     backgroundColor="#ecf0f1"
                 />
                 <CreateUserShopForm
-                    navigation={navigation}
                     userShop={userShop}
-                    setUserShopUpdated={setUserShopUpdated}
+                    navigation={navigation}
                 />
             </View>
         </SafeAreaView>

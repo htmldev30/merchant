@@ -130,6 +130,7 @@ export class UserShopService {
                         userShopPictureFilesIdentifiers.shopBannerPicture[1],
                     )
                 }
+
                 userShopPictureFiles.shopBannerPicture = `${uploaded_files.userShopProfileBannerFile.url}`
             }
 

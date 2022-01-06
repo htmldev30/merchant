@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView, ScrollView } from 'react-native'
 import { View } from 'native-base'
 import FocusAwareStatusBar from '../../../shared/navigation/FocusAwareStatusBar'
 import { globalStyles } from '../../../../styles/global'
@@ -10,17 +10,19 @@ const EditAccount = ({ route, navigation }) => {
     const { userProfile } = route.params
     return (
         <SafeAreaView style={[globalStyles.container]}>
-            <View {...globalStyles.view_container}>
-                <FocusAwareStatusBar
-                    barStyle="dark-content"
-                    backgroundColor="#ecf0f1"
-                />
-                <EditAccountForm
-                    userProfile={userProfile}
-                    setUserUpdated={setUserUpdated}
-                    navigation={navigation}
-                />
-            </View>
+            <ScrollView {...settingStyles.container}>
+                <View {...globalStyles.view_container}>
+                    <FocusAwareStatusBar
+                        barStyle="dark-content"
+                        backgroundColor="#ecf0f1"
+                    />
+                    <EditAccountForm
+                        userProfile={userProfile}
+                        setUserUpdated={setUserUpdated}
+                        navigation={navigation}
+                    />
+                </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }

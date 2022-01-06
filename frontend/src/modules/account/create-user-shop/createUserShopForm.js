@@ -7,27 +7,20 @@ import { Icon } from 'native-base'
 import { Feather } from '@expo/vector-icons'
 import { View, Text } from 'native-base'
 import * as ImagePicker from 'expo-image-picker'
+import { DeviceEventEmitter } from 'react-native'
 
 // Customs
 import { getValueFor } from '../../../shared/UserAuthentication'
 import { InputField } from '../../../components/form-fields/InputField'
 import C_Button from '../../../components/ui-components/Button'
 import { getFileInfo } from '../../../shared/FileInformation'
+import { SelectField } from '../../../components/form-fields/SelectField'
 
-export default CreateUserShopForm = ({
-    navigation,
-    userShop,
-    setUserShopUpdated,
-}) => {
+export default CreateUserShopForm = ({ userShop, navigation }) => {
     const [responseMessage, setResponseMessage] = useState(null)
     const [errors, setErrors] = useState(null)
-    // const existingUserShopValues = {
-    //     shopName: userShop.shopName,
-    //     shopCategory: userShop.shopCategory,
-    //     shopDescription: userShop.shopDescription,
-    //     shopSlogan: userShop.shopSlogan,
-    //     shopLocation: userShop.shopLocation,
-    // }
+    const [selectedShopCategory, setSelectedShopCategory] = useState(null)
+
     const [
         selectedUserShopProfilePictureFile,
         setSelectedUserShopProfilePictureFile,
@@ -112,9 +105,17 @@ export default CreateUserShopForm = ({
         shopLocation: Yup.string(),
     })
 
+    const selectOptions = [
+        { key: 'clothes', value: 'Clothes' },
+        { key: 'beauty', value: 'Beauty' },
+        { key: 'accessories', value: 'Accessories' },
+        { key: 'other', value: 'Other' },
+    ]
+
     const navigationHandler = () => {
         navigation.navigate('Profile')
     }
+
     return (
         <Formik
             enableReinitialize={true}
@@ -175,7 +176,9 @@ export default CreateUserShopForm = ({
                     .then(function (response) {
                         setResponseMessage(response.data.message)
                         setErrors(false)
-                        setUserShopUpdated(true)
+                        DeviceEventEmitter.emit('userShopUpdated')
+                        DeviceEventEmitter.emit('userUpdated')
+
                         navigationHandler()
                     })
                     .catch(function (error) {
@@ -218,14 +221,27 @@ export default CreateUserShopForm = ({
                             onBlur={handleBlur('shopName')}
                         />
 
-                        <InputField
+                        <SelectField
                             label="Shop Category"
                             name="shopCategory"
-                            value={values.shopCategory}
-                            onChangeText={handleChange('shopCategory')}
-                            onBlur={handleBlur('shopCategory')}
-                            autoCorrect={false}
+                            selectPlaceholder={userShop.shopCategory}
+                            selectPlaceholderColor="primary.500"
+                            accessibilityLabel="Select shop category"
+                            onValueChange={(shopCategory) =>
+                                setSelectedShopCategory(shopCategory)
+                            }
+                            value={selectedShopCategory}
+                            selectOptions={selectOptions}
                         />
+                        {selectedShopCategory == 'Other' ? (
+                            <InputField
+                                label="Specify Shop Category"
+                                alert={true}
+                                name="shopCategory"
+                                onChangeText={handleChange('shopCategory')}
+                                onBlur={handleBlur('shopCategory')}
+                            />
+                        ) : null}
                         <InputField
                             label="Shop Description"
                             name="shopDescription"
