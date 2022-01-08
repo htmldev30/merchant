@@ -10,7 +10,7 @@ const EditAccount = ({ route, navigation }) => {
     const { userProfile } = route.params
     return (
         <SafeAreaView style={[globalStyles.container]}>
-            <ScrollView {...settingStyles.container}>
+            <ScrollView>
                 <View {...globalStyles.view_container}>
                     <FocusAwareStatusBar
                         barStyle="dark-content"
