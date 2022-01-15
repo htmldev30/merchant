@@ -97,9 +97,7 @@ const Dashboard = ({ navigation }) => {
                 <HStack pt={2} alignItems="center" safeAreaBottom>
                     <C_Button
                         onPress={() => setShowModal(true)}
-                        width="25%"
-                        height="45"
-                        borderRadius={0}
+                        styles={{ w: '25%', h: '40px', borderRadius: 0 }}
                         leftIcon={
                             <Icon as={Feather} name="message-square" size={6} />
                         }
@@ -108,9 +106,7 @@ const Dashboard = ({ navigation }) => {
                     <C_Button
                         title="New Product"
                         onPress={navigationHandler}
-                        width="75%"
-                        height="45"
-                        borderRadius={0}
+                        styles={{ w: '75%', h: '40px', borderRadius: 0 }}
                     />
                 </HStack>
                 <Modal

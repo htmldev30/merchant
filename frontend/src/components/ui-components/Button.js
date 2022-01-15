@@ -13,17 +13,16 @@ const C_Button = ({
     ...props
 }) => {
     return (
-        <>
-            <Button
-                onPress={onPress}
-                size={size}
-                colorScheme={color}
-                leftIcon={loading ? <Spinner color="white" /> : leftIcon}
-                {...props}
-            >
-                {title}
-            </Button>
-        </>
+        <Button
+            onPress={onPress}
+            size={size}
+            colorScheme={color}
+            leftIcon={loading ? <Spinner color="white" /> : leftIcon}
+            {...styles}
+            {...props}
+        >
+            {title}
+        </Button>
     )
 }
 

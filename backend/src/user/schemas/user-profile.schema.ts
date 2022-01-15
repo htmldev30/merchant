@@ -32,6 +32,10 @@ export const UserProfileSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    email: {
+        type: String,
+        required: false,
+    },
     isVerified: {
         type: Boolean,
         required: [true, 'You must verify your email to use this feature'],

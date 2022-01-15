@@ -29,7 +29,6 @@ export class UserService {
                     'username displayName bio avatar isVerified isSeller userId',
                 )
                 .exec()
-
             return userProfile
         } catch (error) {
             return error
@@ -43,7 +42,6 @@ export class UserService {
             const userProfileExists = await this.userProfileModel
                 .findOne({
                     userId: createUserProfileDto.userId,
-                    isVerified: createUserProfileDto.isVerified,
                 })
                 .exec()
             if (userProfileExists) {

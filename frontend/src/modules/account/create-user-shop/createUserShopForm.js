@@ -115,7 +115,6 @@ export default CreateUserShopForm = ({ userShop, navigation }) => {
     const navigationHandler = () => {
         navigation.navigate('Profile')
     }
-
     return (
         <Formik
             enableReinitialize={true}
@@ -178,7 +177,6 @@ export default CreateUserShopForm = ({ userShop, navigation }) => {
                         setErrors(false)
                         DeviceEventEmitter.emit('userShopUpdated')
                         DeviceEventEmitter.emit('userUpdated')
-
                         navigationHandler()
                     })
                     .catch(function (error) {
@@ -224,7 +222,7 @@ export default CreateUserShopForm = ({ userShop, navigation }) => {
                         <SelectField
                             label="Shop Category"
                             name="shopCategory"
-                            selectPlaceholder={userShop.shopCategory}
+                            selectPlaceholder={userShop?.shopCategory}
                             selectPlaceholderColor="primary.500"
                             accessibilityLabel="Select shop category"
                             onValueChange={(shopCategory) =>
@@ -304,7 +302,7 @@ export default CreateUserShopForm = ({ userShop, navigation }) => {
                                     false
                                 )
                             }
-                            mb={1}
+                            styles={{ mb: 4 }}
                             onPress={pickUserShopProfileBannerFile}
                         />
                         <C_Button

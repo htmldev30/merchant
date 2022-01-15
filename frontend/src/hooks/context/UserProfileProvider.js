@@ -1,25 +1,28 @@
 import React, { createContext, useState, useEffect } from 'react'
 import axios from 'axios'
 import { DeviceEventEmitter } from 'react-native'
-import {
-    checkAuthentication,
-    getValueFor,
-} from '../../shared/UserAuthentication'
+import { getValueFor } from '../../shared/UserAuthentication'
+import { auth, onAuthStateChanged } from '../../firebase'
 
 export const UserProfileContext = createContext()
 
 const UserProfileProvider = (props) => {
-    const isAuthenticated = checkAuthentication()
     const [userProfile, setUserProfile] = useState([])
     const [userUpdated, setUserUpdated] = useState(false)
     useEffect(() => {
-        if (isAuthenticated) {
-            //  ? check if UserProfile is null
+        let mounted = true
+        let unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (userUpdated) {
+                    getUserProfile()
 
-            getUserProfile()
-            userUpdatedSubscription.remove()
-        }
-    }, [isAuthenticated, userUpdated])
+                    userUpdatedSubscription.remove()
+                }
+            }
+        })
+
+        return () => (mounted = false)
+    }, [userUpdated])
 
     const userUpdatedSubscription = DeviceEventEmitter.addListener(
         'userUpdated',
@@ -32,7 +35,6 @@ const UserProfileProvider = (props) => {
 
             const token = await getValueFor('jwtToken')
             const currentUserId = await getValueFor('currentUserId')
-
             const response = await axios({
                 headers: {
                     'Content-Type': 'application/json',

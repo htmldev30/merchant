@@ -40,3 +40,24 @@ export const authNativeBaseStyles = {
         color: 'text.500',
     },
 }
+
+export const authNativeBaseFormStyles = {
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+    },
+    heading: {
+        px: 4,
+        py: 4,
+        fontSize: 36,
+        color: 'primary.500',
+    },
+    inputContainer: { w: '80%' },
+    buttonContainer: {
+        w: '60%',
+        justifyContent: 'center',
+        mt: 5,
+    },
+}

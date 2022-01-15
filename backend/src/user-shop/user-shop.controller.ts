@@ -24,10 +24,7 @@ export class UserShopController {
     constructor(private userShopService: UserShopService) {}
 
     @Get('/:shopCreatorId')
-    async getUserShop(
-        @Res() res,
-        @Param('shopCreatorId', new ParseUUIDPipe()) shopCreatorId,
-    ) {
+    async getUserShop(@Res() res, @Param('shopCreatorId') shopCreatorId) {
         const userShop = await this.userShopService.getUserShop(shopCreatorId)
         if (userShop instanceof Error) {
             const formattedError = errorFormatter(userShop)
@@ -84,7 +81,7 @@ export class UserShopController {
     )
     async updateUserShop(
         @Res() res,
-        @Param('shopCreatorId', new ParseUUIDPipe()) shopCreatorId: string,
+        @Param('shopCreatorId') shopCreatorId: string,
         @Body() updateUserShopDto: CreateUserShopDto,
         @UploadedFiles() files,
     ) {

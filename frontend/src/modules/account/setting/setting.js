@@ -105,7 +105,7 @@ const Setting = ({ route, navigation }) => {
                                         />
                                     }
                                     color="emerald"
-                                    w="125px"
+                                    styles={{ w: '125px' }}
                                     title="Orders"
                                 />
                                 <C_Button
@@ -117,7 +117,7 @@ const Setting = ({ route, navigation }) => {
                                         />
                                     }
                                     color="warning"
-                                    w="125px"
+                                    styles={{ w: '125px' }}
                                     title="Inbox"
                                 />
                                 <C_Button
@@ -129,7 +129,7 @@ const Setting = ({ route, navigation }) => {
                                         />
                                     }
                                     color="indigo"
-                                    w="125px"
+                                    styles={{ w: '125px' }}
                                     title="Status"
                                 />
                                 <C_Button
@@ -141,7 +141,7 @@ const Setting = ({ route, navigation }) => {
                                         />
                                     }
                                     color="light"
-                                    w="125px"
+                                    styles={{ w: '125px' }}
                                     title="Appearance"
                                 />
                                 <C_Button
@@ -153,7 +153,7 @@ const Setting = ({ route, navigation }) => {
                                         />
                                     }
                                     color="tertiary"
-                                    w="125px"
+                                    styles={{ w: '125px' }}
                                     title="Share"
                                 />
                             </HStack>

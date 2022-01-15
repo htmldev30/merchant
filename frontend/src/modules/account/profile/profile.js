@@ -66,7 +66,7 @@ const Profile = (props) => {
                     <Stack space={1} mb={2}>
                         <VStack>
                             <Center>
-                                <Text {...profileStyles.shopSlogan}>
+                                <Text>
                                     {userShop
                                         ? userShop.shopSlogan
                                         : userProfile

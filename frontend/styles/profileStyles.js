@@ -81,11 +81,6 @@ export const profileStyles = {
         color: 'secondary.500',
         fontSize: 16,
     },
-    shopSlogan: {
-        italic: true,
-        color: 'primary.500',
-        highlight: true,
-    },
 }
 
 export const settingStyles = {

@@ -8,7 +8,7 @@ import CreateUserShopScreen from '../../screens/account/CreateUserShopScreen'
 const AccountStack = createStackNavigator()
 export const AccountStackScreens = () => {
     return (
-        <AccountStack.Navigator>
+        <AccountStack.Navigator independent={true}>
             {/* profile can have wishlist and likes and tracking packages */}
             <AccountStack.Screen name="Profile" component={ProfileScreen} />
             <AccountStack.Screen name="Setting" component={SettingScreen} />

@@ -5,8 +5,9 @@ export const C_Input = forwardRef(
         return (
             <Input
                 ref={ref}
-                {...styles.textInput}
                 selectionColor="secondary.500"
+                placeholder={props.inputPlaceholder}
+                {...styles.textInput}
                 {...props}
                 {...(props.multiline ? styles.overrideTextInput : null)}
             />

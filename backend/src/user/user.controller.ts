@@ -23,11 +23,9 @@ export class UserController {
     constructor(private userService: UserService) {}
 
     @Get('/:userProfileId')
-    async getUserProfile(
-        @Res() res,
-        @Param('userProfileId', new ParseUUIDPipe()) userProfileId,
-    ) {
+    async getUserProfile(@Res() res, @Param('userProfileId') userProfileId) {
         const userProfile = await this.userService.getUserProfile(userProfileId)
+        console.log(userProfile)
         if (userProfile instanceof Error) {
             const formattedError = errorFormatter(userProfile)
 
@@ -40,10 +38,7 @@ export class UserController {
     }
     // // Register As Seller
     @Get('/seller-request/:userProfileId')
-    async getSellerRequest(
-        @Res() res,
-        @Param('userProfileId', new ParseUUIDPipe()) userProfileId,
-    ) {
+    async getSellerRequest(@Res() res, @Param('userProfileId') userProfileId) {
         const sellerRequest = await this.userService.getSellerRequest(
             userProfileId,
         )
@@ -103,7 +98,7 @@ export class UserController {
     )
     async updateUserProfile(
         @Res() res,
-        @Param('userId', new ParseUUIDPipe()) userId: string,
+        @Param('userId') userId: string,
         @Body() updateUserProfileDto: CreateUserProfileDto,
         @UploadedFiles() files,
     ) {
