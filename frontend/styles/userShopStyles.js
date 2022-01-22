@@ -11,7 +11,7 @@ export const userDashboardStyles = {
         color: 'primary.500',
     },
     scrollViewSectionalContainer: {
-        height: 250,
+        height: 300,
         ml: 3,
         mt: 2,
     },

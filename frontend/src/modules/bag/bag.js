@@ -1,7 +1,9 @@
 import React from 'react'
-import { View, Text, SafeAreaView } from 'react-native'
+import { SafeAreaView } from 'react-native'
+import { View, Text } from 'native-base'
 import { globalStyles } from '../../../styles/global'
 import FocusAwareStatusBar from '../../shared/navigation/FocusAwareStatusBar'
+
 const Bag = () => {
     return (
         <SafeAreaView style={[globalStyles.container]}>
@@ -15,5 +17,4 @@ const Bag = () => {
         </SafeAreaView>
     )
 }
-
 export default Bag

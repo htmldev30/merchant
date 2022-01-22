@@ -4,7 +4,6 @@ import { View } from 'native-base'
 import FocusAwareStatusBar from '../../../shared/navigation/FocusAwareStatusBar'
 import { globalStyles } from '../../../../styles/global'
 import CreateUserShopForm from './createUserShopForm.js'
-import { UserShopContext } from '../../../hooks/context/UserShopProvider'
 const CreateUserShop = ({ route, navigation }) => {
     const { userShop } = route.params
     return (

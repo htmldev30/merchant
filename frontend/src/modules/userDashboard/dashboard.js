@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { SafeAreaView } from 'react-native'
 import { globalStyles } from '../../../styles/global'
 import {
@@ -17,11 +17,12 @@ import {
 import { Feather } from '@expo/vector-icons'
 import FocusAwareStatusBar from '../../shared/navigation/FocusAwareStatusBar'
 import { userDashboardStyles } from '../../../styles/userShopStyles'
-import ExploreCard from '../../components/ui-components/cards/ExploreCard'
 import C_Button from '../../components/ui-components/Button'
 import ReviewCard from '../../components/ui-components/cards/ReviewCard'
-
+import ProductsScroll from './productsScroll'
+import { UserShopProductContext } from '../../hooks/context/UserShopProductProvider'
 const Dashboard = ({ navigation }) => {
+    const { allUserShopProducts } = useContext(UserShopProductContext)
     const [showModal, setShowModal] = useState(false)
     const navigationHandler = () => {
         navigation.navigate('CreateProductScreens')
@@ -33,67 +34,15 @@ const Dashboard = ({ navigation }) => {
                 backgroundColor="#ecf0f1"
             />
             <View style={globalStyles.view_container}>
-                <ScrollView scrollEventThrottle={16}>
-                    <View {...userDashboardStyles.scrollViewContainer}>
-                        <Text {...userDashboardStyles.scrollViewSectionalTitle}>
-                            <Icon
-                                as={Feather}
-                                name="trending-up"
-                                size={5}
-                                color="tertiary.700"
-                            />
-                            Best Sellers
-                        </Text>
+                {!allUserShopProducts.length ? null : (
+                    <ScrollView scrollEventThrottle={16}>
+                        <ProductsScroll
+                            scrollTitle="All Products"
+                            allUserShopProducts={allUserShopProducts}
+                        />
+                    </ScrollView>
+                )}
 
-                        <View
-                            {...userDashboardStyles.scrollViewSectionalContainer}
-                        >
-                            <ScrollView
-                                horizontal={true}
-                                showsHorizontalScrollIndicator={false}
-                            >
-                                <ExploreCard
-                                    productName={'iPhone Cow Skin Cases'}
-                                    productPreview={
-                                        'https://sc04.alicdn.com/kf/Hb5757497778b42e9bb3089830885e025T.jpg'
-                                    }
-                                    productCategory={'iPhone Accessories'}
-                                    productPrice={50}
-                                />
-                            </ScrollView>
-                        </View>
-                    </View>
-                    <View {...userDashboardStyles.scrollViewContainer}>
-                        <Text {...userDashboardStyles.scrollViewSectionalTitle}>
-                            <Icon
-                                as={Feather}
-                                name="trending-down"
-                                size={5}
-                                color="danger.700"
-                            />
-                            Worst Sellers
-                        </Text>
-
-                        <View
-                            {...userDashboardStyles.scrollViewSectionalContainer}
-                        >
-                            <ScrollView
-                                horizontal={true}
-                                showsHorizontalScrollIndicator={false}
-                            >
-                                <ExploreCard
-                                    productName={'iPhone Cow Skin Cases'}
-                                    productPreview={
-                                        'https://sc04.alicdn.com/kf/Hb5757497778b42e9bb3089830885e025T.jpg'
-                                    }
-                                    productCategory={'iPhone Accessories'}
-                                    productPrice={50}
-                                    productDiscounted={true}
-                                />
-                            </ScrollView>
-                        </View>
-                    </View>
-                </ScrollView>
                 <HStack pt={2} alignItems="center" safeAreaBottom>
                     <C_Button
                         onPress={() => setShowModal(true)}

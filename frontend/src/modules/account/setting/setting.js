@@ -14,7 +14,7 @@ import {
     Stack,
     VStack,
     HStack,
-    Center,
+    Spinner,
     ScrollView,
     Pressable,
     Badge,
@@ -239,50 +239,69 @@ const Setting = ({ route, navigation }) => {
                                 />
                             </HStack>
 
-                            {userProfile.isVerified && !sellerRequest ? (
-                                <HStack space={5} alignItems="center" mt={10}>
-                                    <C_Button
-                                        title="Become A Merchant!"
-                                        size="lg"
-                                        leftIcon={
-                                            <Icon
-                                                as={Feather}
-                                                name="shopping-bag"
-                                                size={5}
+                            {userProfile.isVerified ? (
+                                <>
+                                    {!sellerRequest ? (
+                                        <HStack
+                                            space={5}
+                                            alignItems="center"
+                                            mt={10}
+                                        >
+                                            <C_Button
+                                                title="Become A Merchant!"
+                                                size="lg"
+                                                leftIcon={
+                                                    <Icon
+                                                        as={Feather}
+                                                        name="shopping-bag"
+                                                        size={5}
+                                                    />
+                                                }
+                                                onPress={() =>
+                                                    navigation.navigate(
+                                                        'SellerRequest'
+                                                    )
+                                                }
                                             />
-                                        }
-                                        onPress={() =>
-                                            navigation.navigate('SellerRequest')
-                                        }
-                                    />
-                                </HStack>
-                            ) : userProfile.isVerified &&
-                              !sellerRequest.isApproved ? (
-                                <HStack space={5} alignItems="center" mt={10}>
-                                    <Badge colorScheme="warning">
-                                        Your Merchant request is still been
-                                        processed.
-                                    </Badge>
-                                </HStack>
-                            ) : userProfile.isVerified &&
-                              sellerRequest.isApproved &&
-                              !userProfile.isSeller ? (
-                                <VStack space={5} alignItems="center" mt={10}>
-                                    <Badge colorScheme="tertiary">
-                                        Congratulations! You're now a Merchant!
-                                    </Badge>
+                                        </HStack>
+                                    ) : !sellerRequest.isApproved ? (
+                                        <HStack
+                                            space={5}
+                                            alignItems="center"
+                                            mt={10}
+                                        >
+                                            <Badge colorScheme="warning">
+                                                Your Merchant request is still
+                                                been processed.
+                                            </Badge>
+                                        </HStack>
+                                    ) : sellerRequest.isApproved &&
+                                      !userProfile.isSeller ? (
+                                        <VStack
+                                            space={5}
+                                            alignItems="center"
+                                            mt={10}
+                                        >
+                                            <Badge colorScheme="tertiary">
+                                                Congratulations! You're now a
+                                                Merchant!
+                                            </Badge>
 
-                                    <C_Button
-                                        title="Setup Shop!"
-                                        size="lg"
-                                        onPress={() =>
-                                            navigation.navigate(
-                                                'CreateUserShop',
-                                                { userShop: userShop }
-                                            )
-                                        }
-                                    />
-                                </VStack>
+                                            <C_Button
+                                                title="Setup Shop!"
+                                                size="lg"
+                                                onPress={() =>
+                                                    navigation.navigate(
+                                                        'CreateUserShop',
+                                                        { userShop: userShop }
+                                                    )
+                                                }
+                                            />
+                                        </VStack>
+                                    ) : (
+                                        <Spinner accessibilityLabel="Fetching" />
+                                    )}
+                                </>
                             ) : null}
                         </VStack>
                     </Stack>

@@ -8,6 +8,8 @@ import { MinioClientService } from 'src/minio-client/minio-client.service'
 import { BufferedFile } from 'src/minio-client/file.model'
 import { v4 as uuid } from 'uuid'
 import FieldsToUpdate from 'src/common/shared/fieldsToUpdate.common'
+import { IUserShopProduct } from './interfaces/create-user-shop-product.interface'
+import { CreateUserShopProductDto } from './dto/create-user-shop-product.dto'
 @Injectable()
 export class UserShopService {
     constructor(
@@ -16,6 +18,8 @@ export class UserShopService {
         private minioClientService: MinioClientService,
         @InjectModel('UserProfile')
         private readonly userProfileModel: Model<IUserProfile>,
+        @InjectModel('UserShopProduct')
+        private readonly userShopProductModel: Model<IUserShopProduct>,
     ) {}
 
     async getUserShop(shopCreatorId: string): Promise<IUserShop> {
@@ -43,7 +47,6 @@ export class UserShopService {
                     userShopProfilePictureFile,
                     userShopProfileBannerFile,
                 )
-
             const shopId = uuid()
             const isSeller = await this.userProfileModel.findOneAndUpdate(
                 {
@@ -157,6 +160,103 @@ export class UserShopService {
             return updatedUserShop
         } catch (error) {
             console.log(error)
+            return error
+        }
+    }
+    async getIndividualProduct(
+        shopCreatorId: string,
+        shopId: string,
+        productId: string,
+    ): Promise<IUserShopProduct> {
+        try {
+            const individualProduct = this.userShopProductModel.findOne({
+                shopCreatorId: shopCreatorId,
+                shopId: shopId,
+                productId: productId,
+            })
+            return individualProduct
+        } catch (error) {
+            return error
+        }
+    }
+    async getAllProducts(
+        shopCreatorId: string,
+        shopId: string,
+    ): Promise<IUserShopProduct[]> {
+        try {
+            const allProducts = this.userShopProductModel
+                .find(
+                    {
+                        shopCreatorId: shopCreatorId,
+                        shopId: shopId,
+                    },
+                    'productName productCategory productDescription productDetails productPrice productPictureFront productPictureLeft productPictureRight productPictureBack productId shopId shopCreatorId',
+                )
+                .sort({ createdAt: -1 })
+
+            return allProducts
+        } catch (error) {
+            return error
+        }
+    }
+    async createUserShopProduct(
+        shopCreatorId: string,
+        shopId: string,
+        createUserShopProductDto: CreateUserShopProductDto,
+        userShopProductPictureFrontFile,
+        userShopProductPictureLeftFile,
+        userShopProductPictureRightFile,
+        userShopProductPictureBackFile,
+    ): Promise<IUserShopProduct> {
+        try {
+            const uploaded_files =
+                await this.minioClientService.uploadUserShopProductPictures(
+                    userShopProductPictureFrontFile,
+                    userShopProductPictureLeftFile,
+                    userShopProductPictureRightFile,
+                    userShopProductPictureBackFile,
+                )
+
+            const existingUserProduct = await this.userShopProductModel
+                .findOne({
+                    shopCreatorId: createUserShopProductDto.shopCreatorId,
+                    shopId: createUserShopProductDto.shopId,
+                    productId: createUserShopProductDto.productId,
+                })
+                .exec()
+            if (existingUserProduct) {
+                return existingUserProduct
+            }
+            const newUserShopProduct =
+                await this.userShopProductModel.findOneAndUpdate(
+                    {
+                        shopCreatorId: createUserShopProductDto.shopCreatorId,
+                        shopId: createUserShopProductDto.shopId,
+                        productId: createUserShopProductDto.productId,
+                    },
+                    {
+                        productName: createUserShopProductDto.productName,
+                        productCategory:
+                            createUserShopProductDto.productCategory,
+                        productDescription:
+                            createUserShopProductDto.productDescription,
+                        productPrice: createUserShopProductDto.productPrice,
+                        productPictureFront:
+                            uploaded_files.userShopProductPictureFrontFile.url,
+                        productPictureLeft:
+                            uploaded_files.userShopProductPictureLeftFile.url,
+                        productPictureRight:
+                            uploaded_files.userShopProductPictureRightFile.url,
+                        productPictureBack:
+                            uploaded_files.userShopProductPictureBackFile.url,
+                        productId: createUserShopProductDto.productId,
+                        shopId: shopId,
+                        shopCreatorId: shopCreatorId,
+                    },
+                    { new: true, upsert: true },
+                )
+            return newUserShopProduct
+        } catch (error) {
             return error
         }
     }

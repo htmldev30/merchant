@@ -5,38 +5,38 @@ import { DeviceEventEmitter } from 'react-native'
 import { getValueFor, save } from '../../shared/UserAuthentication'
 import { auth, onAuthStateChanged } from '../../firebase'
 
-export const UserShopContext = createContext()
+export const UserShopProductContext = createContext()
 
 const UserShopProvider = (props) => {
-    const [userShop, setUserShop] = useState([])
-    const [userShopUpdated, setUserShopUpdated] = useState(false)
+    const [allUserShopProducts, setAllUserShopProducts] = useState([])
+    const [userShopProductsUpdated, setUserShopProductsUpdated] =
+        useState(false)
 
     // runs whenever userShop is updated | not relying on true or false
     useEffect(() => {
         let mounted = true
         let unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user || userShopUpdated) {
-                if (userShop.length) {
-                    getUserShop()
-                }
+            if (user || userShopProductsUpdated) {
+                getAllUserShopProducts()
 
-                userShopUpdatedSubscription.remove()
+                userShopProductsUpdatedSubscription.remove()
             }
         })
 
         return () => (mounted = false)
-    }, [userShopUpdated])
+    }, [userShopProductsUpdated])
 
-    const userShopUpdatedSubscription = DeviceEventEmitter.addListener(
-        'userShopUpdated',
-        () => setUserShopUpdated(true)
+    const userShopProductsUpdatedSubscription = DeviceEventEmitter.addListener(
+        'userShopProductsUpdated',
+        () => setUserShopProductsUpdated(true)
     )
 
-    const getUserShop = async () => {
+    const getAllUserShopProducts = async () => {
         try {
             let mounted = true
             const token = await getValueFor('jwtToken')
             const shopCreatorId = await getValueFor('currentUserId')
+            const currentUserShopId = await getValueFor('currentUserShopId')
             const response = await axios({
                 headers: {
                     'Content-Type': 'application/json',
@@ -44,16 +44,16 @@ const UserShopProvider = (props) => {
                     authorization: `Bearer ${token}`,
                 },
                 method: 'get',
-                url: `http://192.168.0.9:3001/user-shop/${shopCreatorId}`,
+                url: `http://192.168.0.9:3001/user-shop/${shopCreatorId}/${currentUserShopId}/products`,
             })
                 .then(function (response) {
                     return response
                 })
                 .then(function (response) {
-                    const userShop = response.data.userShop
-                    setUserShop(userShop)
-                    save('currentUserShopId', userShop.shopId)
-                    setUserShopUpdated(false)
+                    const allUserShopProducts =
+                        response.data.allUserShopProducts
+                    setAllUserShopProducts(allUserShopProducts)
+                    setUserShopProductsUpdated(false)
                 })
             return () => (mounted = false)
         } catch (error) {
@@ -61,9 +61,9 @@ const UserShopProvider = (props) => {
         }
     }
     return (
-        <UserShopContext.Provider value={{ userShop, setUserShopUpdated }}>
+        <UserShopProductContext.Provider value={{ allUserShopProducts }}>
             {props.children}
-        </UserShopContext.Provider>
+        </UserShopProductContext.Provider>
     )
 }
 export default UserShopProvider

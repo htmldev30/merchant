@@ -17,13 +17,13 @@ const AuthenticationProvider = (props) => {
                     save('jwtToken', token)
                 })
                 save('currentUserId', user.uid)
+                if (user.emailVerified == false) {
+                    sendEmailVerification(auth.currentUser)
+                }
                 postUserProfileData(user)
             }
             if (!user) {
                 setIsAuthenticated(false)
-            }
-            if (user?.emailVerified == false) {
-                sendEmailVerification(auth.currentUser)
             }
         })
         return unsubscribe
@@ -54,6 +54,8 @@ const AuthenticationProvider = (props) => {
                     isVerified: isVerified,
                     userId: userId,
                 },
+            }).then(function (response) {
+                console.log(response.data.message)
             })
             DeviceEventEmitter.emit('userUpdated')
             return () => (mounted = false)

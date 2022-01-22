@@ -146,8 +146,14 @@ export default CreateUserShopForm = ({ userShop, navigation }) => {
                 const token = await getValueFor('jwtToken')
                 const shopCreatorId = await getValueFor('currentUserId')
                 const allData = new FormData()
+
                 allData.append('shopName', shopName)
-                allData.append('shopCategory', shopCategory)
+
+                if (selectedShopCategory) {
+                    allData.append('shopCategory', selectedShopCategory)
+                } else {
+                    allData.append('shopCategory', shopCategory)
+                }
                 allData.append('shopDescription', shopDescription)
                 allData.append('shopSlogan', shopSlogan)
                 allData.append('shopLocation', shopLocation)
@@ -166,7 +172,7 @@ export default CreateUserShopForm = ({ userShop, navigation }) => {
                         Accept: 'application/json',
                         authorization: `Bearer ${token}`,
                     },
-                    method: userShop ? 'put' : 'post',
+                    method: userShop.length > 0 ? 'put' : 'post',
                     url: userShop
                         ? `http://192.168.0.9:3001/user-shop/${shopCreatorId}`
                         : `http://192.168.0.9:3001/user-shop`,
@@ -228,7 +234,11 @@ export default CreateUserShopForm = ({ userShop, navigation }) => {
                             onValueChange={(shopCategory) =>
                                 setSelectedShopCategory(shopCategory)
                             }
-                            value={selectedShopCategory}
+                            value={
+                                selectedShopCategory != null
+                                    ? selectedShopCategory
+                                    : values.shopCategory
+                            }
                             selectOptions={selectOptions}
                         />
                         {selectedShopCategory == 'Other' ? (

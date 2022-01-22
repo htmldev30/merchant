@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import DashboardScreen from '../../screens/userShop/DashboardScreen'
 import SelectCategoryScreen from '../../screens/userShop/SelectCategoryScreen'
@@ -10,6 +10,7 @@ import { Icon, Text } from 'native-base'
 import ReviewProductInformationScreen from '../../screens/userShop/ReviewProductInformationScreen'
 import SelectImagesScreen from '../../screens/userShop/SelectImagesScreen'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { UserShopContext } from '../../hooks/context/UserShopProvider'
 const createProductTabs = createBottomTabNavigator()
 const userDashboardStack = createStackNavigator()
 export const CreateProductScreens = () => {
@@ -76,27 +77,28 @@ export const CreateProductScreens = () => {
             <createProductTabs.Screen
                 name="ReviewProductInformation"
                 component={ReviewProductInformationScreen}
-                options={{ title: 'Review Product ' }}
+                options={{ title: 'Review Product' }}
             />
         </createProductTabs.Navigator>
     )
 }
 
 export const UserDashboardScreens = () => {
+    const { userShop } = useContext(UserShopContext)
+    // Navigation Container removed for ref and global navigation
     return (
-        <NavigationContainer independent={true}>
-            <userDashboardStack.Navigator>
-                <userDashboardStack.Screen
-                    name="Dashboard"
-                    component={DashboardScreen}
-                />
-                <userDashboardStack.Screen
-                    name="CreateProductScreens"
-                    component={CreateProductScreens}
-                    options={{ headerShown: false }}
-                />
-            </userDashboardStack.Navigator>
-        </NavigationContainer>
+        <userDashboardStack.Navigator>
+            <userDashboardStack.Screen
+                name="Dashboard"
+                component={DashboardScreen}
+                options={{ title: `${userShop?.shopName} : No Shop` }}
+            />
+            <userDashboardStack.Screen
+                name="CreateProductScreens"
+                component={CreateProductScreens}
+                options={{ headerShown: false }}
+            />
+        </userDashboardStack.Navigator>
     )
 }
 

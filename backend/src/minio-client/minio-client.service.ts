@@ -1,12 +1,18 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common'
 import { MinioService } from 'nestjs-minio-client'
 import { BufferedFile } from './file.model'
-import fileFilter from './other/file-filter'
-import renameFile from './other/rename-file'
+import { fileFilter, productFileFilter } from './other/file-filter'
+import { renameFile, renameProductFiles } from './other/rename-file'
 
-interface IFiles {
+interface IShopProfileFiles {
     userShopProfilePictureFile?: { original_name: string; url: string }
     userShopProfileBannerFile?: { original_name: string; url: string }
+}
+interface IUserShopProductFiles {
+    userShopProductPictureFrontFile?: { original_name: string; url: string }
+    userShopProductPictureLeftFile?: { original_name: string; url: string }
+    userShopProductPictureRightFile?: { original_name: string; url: string }
+    userShopProductPictureBackFile?: { original_name: string; url: string }
 }
 @Injectable()
 export class MinioClientService {
@@ -109,6 +115,38 @@ export class MinioClientService {
                 },
             ],
         }
+        // THIS IS User Shop Product POLICY
+        const userShopProductPolicy = {
+            Version: '2012-10-17',
+            Statement: [
+                {
+                    Effect: 'Allow',
+                    Principal: {
+                        AWS: ['*'],
+                    },
+                    Action: [
+                        's3:ListBucketMultipartUploads',
+                        's3:GetBucketLocation',
+                        's3:ListBucket',
+                    ],
+                    Resource: ['arn:aws:s3:::user-shop-product'], // Change this according to your bucket name
+                },
+                {
+                    Effect: 'Allow',
+                    Principal: {
+                        AWS: ['*'],
+                    },
+                    Action: [
+                        's3:PutObject',
+                        's3:AbortMultipartUpload',
+                        's3:DeleteObject',
+                        's3:GetObject',
+                        's3:ListMultipartUploadParts',
+                    ],
+                    Resource: ['arn:aws:s3:::user-shop-product/*'], // Change this according to your bucket name
+                },
+            ],
+        }
 
         this.client.setBucketPolicy(
             process.env.MINIO_PROFILE_PICTURE_BUCKET_NAME,
@@ -137,6 +175,15 @@ export class MinioClientService {
                 console.log('User Shop Profile Banner Bucket Policy Set')
             },
         )
+        this.client.setBucketPolicy(
+            process.env.MINIO_USER_SHOP_PRODUCT_BUCKET_NAME,
+            JSON.stringify(userShopProductPolicy),
+            function (err) {
+                if (err) throw err
+
+                console.log('User Shop Product Bucket Policy Set')
+            },
+        )
     }
 
     private readonly logger: Logger
@@ -146,7 +193,8 @@ export class MinioClientService {
         process.env.MINIO_USER_SHOP_PROFILE_PICTURE_BUCKET_NAME
     private readonly userShopProfileBannerBucketName =
         process.env.MINIO_USER_SHOP_PROFILE_BANNER_BUCKET_NAME
-
+    private readonly userShopProductBucketName =
+        process.env.MINIO_USER_SHOP_PRODUCT_BUCKET_NAME
     public get client() {
         return this.minio.client
     }
@@ -195,7 +243,7 @@ export class MinioClientService {
         userShopProfileBannerBucketName: string = this
             .userShopProfileBannerBucketName,
     ) {
-        const files: IFiles = {
+        const files: IShopProfileFiles = {
             userShopProfilePictureFile: { original_name: '', url: '' },
             userShopProfileBannerFile: { original_name: '', url: '' },
         }
@@ -249,6 +297,78 @@ export class MinioClientService {
             files.userShopProfileBannerFile.url = `http://${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${process.env.MINIO_USER_SHOP_PROFILE_BANNER_BUCKET_NAME}/${userShopProfileBannerFileName}`
         }
 
+        // We need to append the extension at the end otherwise Minio will save it as a generic file
+        return files
+    }
+    public async uploadUserShopProductPictures(
+        userShopProductPictureFront?: BufferedFile,
+        userShopProductPictureLeft?: BufferedFile,
+        userShopProductPictureRight?: BufferedFile,
+        userShopProductPictureBack?: BufferedFile,
+        userShopProductBucketName: string = this.userShopProductBucketName,
+    ) {
+        const files: IUserShopProductFiles = {
+            userShopProductPictureFrontFile: { original_name: '', url: '' },
+            userShopProductPictureLeftFile: { original_name: '', url: '' },
+            userShopProductPictureRightFile: { original_name: '', url: '' },
+            userShopProductPictureBackFile: { original_name: '', url: '' },
+        }
+
+        productFileFilter(
+            userShopProductPictureFront,
+            userShopProductPictureLeft,
+            userShopProductPictureRight,
+            userShopProductPictureBack,
+        )
+
+        const userShopProductPictureFile = renameProductFiles(
+            userShopProductPictureFront,
+            userShopProductPictureLeft,
+            userShopProductPictureRight,
+            userShopProductPictureBack,
+        )
+        // !loop through each object
+        const allFiles = [
+            userShopProductPictureFront,
+            userShopProductPictureLeft,
+            userShopProductPictureRight,
+            userShopProductPictureBack,
+        ]
+
+        // ! error cause same file name!
+
+        for (let i = 0; i <= allFiles.length; i++) {
+            const originalFiles = Object.keys(allFiles)
+            const individualFile = Object.keys(userShopProductPictureFile)
+            const userShopProductPictureFileName =
+                userShopProductPictureFile[individualFile[i]].hashedFileName +
+                userShopProductPictureFile[individualFile[i]].extension
+            this.client.putObject(
+                userShopProductBucketName,
+                userShopProductPictureFileName,
+                allFiles[originalFiles[i]].buffer,
+                allFiles[originalFiles[i]].metaData,
+                function (err, res) {
+                    if (err) {
+                        throw new HttpException(
+                            'Error uploading file',
+                            HttpStatus.BAD_REQUEST,
+                        )
+                    }
+                },
+            )
+
+            const returnFiles = Object.keys(files)
+            files[
+                returnFiles[i]
+            ].original_name = `${userShopProductPictureFileName}`
+            files[
+                returnFiles[i]
+            ].url = `http://${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${process.env.MINIO_USER_SHOP_PRODUCT_BUCKET_NAME}/${userShopProductPictureFileName}`
+            if (i == allFiles.length - 1) {
+                return files
+            }
+        }
         // We need to append the extension at the end otherwise Minio will save it as a generic file
         return files
     }

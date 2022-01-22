@@ -25,7 +25,6 @@ export class UserController {
     @Get('/:userProfileId')
     async getUserProfile(@Res() res, @Param('userProfileId') userProfileId) {
         const userProfile = await this.userService.getUserProfile(userProfileId)
-        console.log(userProfile)
         if (userProfile instanceof Error) {
             const formattedError = errorFormatter(userProfile)
 
@@ -36,7 +35,7 @@ export class UserController {
 
         return res.status(HttpStatus.OK).json({ userProfile })
     }
-    // // Register As Seller
+    // Register As Seller
     @Get('/seller-request/:userProfileId')
     async getSellerRequest(@Res() res, @Param('userProfileId') userProfileId) {
         const sellerRequest = await this.userService.getSellerRequest(

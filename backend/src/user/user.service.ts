@@ -42,21 +42,33 @@ export class UserService {
             const userProfileExists = await this.userProfileModel
                 .findOne({
                     userId: createUserProfileDto.userId,
+                    isVerified: createUserProfileDto.isVerified, // checks if user is also verify | else ? - update!
                 })
                 .exec()
             if (userProfileExists) {
-                return userProfileExists
+                //  upsert = true option creates the object if it doesn't exist. defaults to false.
+                const newUserProfile =
+                    await this.userProfileModel.findOneAndUpdate(
+                        {
+                            userId: createUserProfileDto.userId,
+                        },
+                        { isVerified: createUserProfileDto.isVerified },
+                        { new: true, upsert: true },
+                    )
+                return newUserProfile
+            } else {
+                //  upsert = true option creates the object if it doesn't exist. defaults to false.
+                const newUserProfile =
+                    await this.userProfileModel.findOneAndUpdate(
+                        {
+                            userId: createUserProfileDto.userId,
+                        },
+                        createUserProfileDto,
+                        { new: true, upsert: true },
+                    )
+                return newUserProfile
             }
-
-            //  upsert = true option creates the object if it doesn't exist. defaults to false.
-            const newUserProfile = await this.userProfileModel.findOneAndUpdate(
-                {
-                    userId: createUserProfileDto.userId,
-                },
-                createUserProfileDto,
-                { new: true, upsert: true },
-            )
-            return newUserProfile
+            return userProfileExists
         } catch (error) {
             return error
         }

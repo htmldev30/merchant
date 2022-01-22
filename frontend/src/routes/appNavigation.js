@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useContext } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Icon } from 'native-base'
 import { Feather } from '@expo/vector-icons'
@@ -7,8 +7,12 @@ import ExploreStackScreens from './stacks/exploreStack'
 import AccountStackScreens from './stacks/accountStack'
 import BagStackScreens from './stacks/bagStack'
 import UserDashboardScreens from './stacks/userDashboardStack'
+
+// Custom
+import { UserShopContext } from '../hooks/context/UserShopProvider'
 const Tab = createBottomTabNavigator()
 export default function AppNavigation() {
+    const { userShop } = useContext(UserShopContext)
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -80,7 +84,7 @@ export default function AppNavigation() {
                             )
                         }
                     }
-                    if (route.name === 'User Dashboard') {
+                    if (userShop.length > 0 && route.name === 'UserDashboard') {
                         if (focused) {
                             return (
                                 <Icon
@@ -129,10 +133,13 @@ export default function AppNavigation() {
             <Tab.Screen name="Explore" component={ExploreStackScreens} />
             <Tab.Screen name="Bag" component={BagStackScreens} />
 
-            <Tab.Screen
-                name="User Dashboard"
-                component={UserDashboardScreens}
-            />
+            {!userShop.length ? null : (
+                <Tab.Screen
+                    name="UserDashboard"
+                    component={UserDashboardScreens}
+                    userShop={userShop}
+                />
+            )}
 
             <Tab.Screen name="Account" component={AccountStackScreens} />
         </Tab.Navigator>

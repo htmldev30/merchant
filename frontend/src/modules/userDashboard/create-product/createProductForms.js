@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
     Keyboard,
     TouchableOpacity,
@@ -13,6 +13,10 @@ import { Formik } from 'formik'
 import * as ImageManipulator from 'expo-image-manipulator'
 import { ImageBrowser } from 'expo-image-picker-multiple'
 import { getFileInfo } from '../../../shared/FileInformation'
+import { getValueFor } from '../../../shared/UserAuthentication'
+import axios from 'axios'
+import { DeviceEventEmitter } from 'react-native'
+import * as RootNavigation from '../../../shared/navigation/RootNavigation'
 const SelectCategoryForm = ({ props }) => {
     // add to state and move with screen
 
@@ -175,12 +179,10 @@ const SelectImagesForm = ({ props }) => {
                         productPhoto.uri
                     )
 
-                    const { newProductPhotoSize } = await getFileInfo(
-                        productPhotoInfo.uri
-                    )
+                    const { size } = await getFileInfo(productPhotoInfo.uri)
                     cProductPhotos.push({
                         name: productPhoto.filename,
-                        size: newProductPhotoSize,
+                        size: size,
                         uri: productPhotoInfo.uri,
                         type: 'application/' + 'image/png',
                     })
@@ -258,6 +260,59 @@ const SelectImagesForm = ({ props }) => {
     )
 }
 
+const submitProduct = async (productInformation, productId) => {
+    const token = await getValueFor('jwtToken')
+    const shopCreatorId = await getValueFor('currentUserId')
+    const shopId = await getValueFor('currentUserShopId')
+    const allData = new FormData()
+    allData.append('productName', productInformation.productName)
+    allData.append('productCategory', productInformation.productCategory)
+    allData.append('productDescription', productInformation.productDescription)
+    allData.append('productPrice', productInformation.productPrice)
+    allData.append('productDetails', productInformation.productDetails)
+    allData.append(
+        'userShopProductPictureFrontFile',
+        productInformation.productPreview[0]
+    )
+    allData.append(
+        'userShopProductPictureLeftFile',
+        productInformation.productPreview[1]
+    )
+    allData.append(
+        'userShopProductPictureRightFile',
+        productInformation.productPreview[2]
+    )
+    allData.append(
+        'userShopProductPictureBackFile',
+        productInformation.productPreview[3]
+    )
+
+    allData.append('productId', productId)
+    allData.append('shopId', shopId)
+    allData.append('shopCreatorId', shopCreatorId)
+
+    const response = await axios({
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            authorization: `Bearer ${token}`,
+        },
+        method: 'post',
+        url: `http://192.168.0.9:3001/user-shop/${shopCreatorId}/${shopId}/create-new-product`,
+        data: allData,
+    })
+        .then(function (response) {
+            DeviceEventEmitter.emit('userShopProductsUpdated')
+            RootNavigation.navigate('UserDashboard', {
+                screen: 'Dashboard',
+            })
+            console.log('WORKING')
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
+}
+
 const imageSelectorStyles = StyleSheet.create({
     flex: {
         flex: 1,
@@ -286,4 +341,9 @@ const imageSelectorStyles = StyleSheet.create({
     },
 })
 
-export { SelectCategoryForm, ProductInformationForm, SelectImagesForm }
+export {
+    SelectCategoryForm,
+    ProductInformationForm,
+    SelectImagesForm,
+    submitProduct,
+}

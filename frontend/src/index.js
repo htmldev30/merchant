@@ -7,8 +7,10 @@ import { fonts } from '../styles/global'
 import { AuthenticationContext } from './hooks/context/AuthenticationProvider'
 import UserShopProvider from './hooks/context/UserShopProvider'
 import UserProfileProvider from './hooks/context/UserProfileProvider'
+import UserShopProductProvider from './hooks/context/UserShopProductProvider'
 // Components
 import RootStackScreen from './routes/rootNavigation'
+import { navigationRef } from './shared/navigation/RootNavigation'
 export default function Index() {
     let [fontsLoaded] = useFonts(fonts)
     const { isAuthenticated } = useContext(AuthenticationContext)
@@ -18,9 +20,13 @@ export default function Index() {
         return (
             <UserProfileProvider>
                 <UserShopProvider>
-                    <NavigationContainer>
-                        <RootStackScreen isAuthenticated={isAuthenticated} />
-                    </NavigationContainer>
+                    <UserShopProductProvider>
+                        <NavigationContainer ref={navigationRef}>
+                            <RootStackScreen
+                                isAuthenticated={isAuthenticated}
+                            />
+                        </NavigationContainer>
+                    </UserShopProductProvider>
                 </UserShopProvider>
             </UserProfileProvider>
         )
