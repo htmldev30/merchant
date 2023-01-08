@@ -8,3 +8,6 @@
 <p align="center">
   <strong>Shop Small Businesses</strong>
 </p>
+<p align="center">
+  <strong>This project was written with the help of open-source libraries and code under the Creative Commons License</strong>
+</p>
