@@ -9,5 +9,5 @@
   <strong>Shop Small Businesses</strong>
 </p>
 <p align="center">
-  <strong>This project was written with the help of open-source libraries and code under the Creative Commons License</strong>
+  <strong>This project was written with the help of open-source libraries listed in the "package.json" files and code under the Creative Commons license</strong>
 </p>
