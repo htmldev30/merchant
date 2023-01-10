@@ -1,3 +1,5 @@
+# Code adapted from RnFirebase Example
+# https://rnfirebase.io/app/usage
 import {
     FIREBASE_API_KEY,
     FIREBASE_AUTHDOMAIN,
