@@ -1,3 +1,5 @@
+# Carousel Section of Code Adapted From GitHub user Meliorence's open source react-native-snap-carousel package example
+# https://github.com/meliorence/react-native-snap-carousel#example
 import React, { useState, useRef } from 'react'
 import { Dimensions } from 'react-native'
 import {
