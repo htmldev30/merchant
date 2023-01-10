@@ -1,3 +1,5 @@
+# Profile UI code adapted from GitHub developer nattatorn-dev under MIT License
+# https://github.com/nattatorn-dev/react-native-user-profile
 import React, { useContext } from 'react'
 import { SafeAreaView, TouchableOpacity } from 'react-native'
 import { Feather } from '@expo/vector-icons'
