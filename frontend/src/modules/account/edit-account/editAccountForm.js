@@ -1,3 +1,5 @@
+# Image selection part of code adapted from Expo documentation example 
+# https://docs.expo.dev/versions/latest/sdk/imagepicker/
 import React, { useState, useEffect } from 'react'
 import { Formik } from 'formik'
 import axios from 'axios'
