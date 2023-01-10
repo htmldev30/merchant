@@ -1,3 +1,5 @@
+# Code adapted from Native Base documentation example
+# https://docs.nativebase.io/select
 import React, { forwardRef } from 'react'
 import { Select, Icon } from 'native-base'
 import { Feather } from '@expo/vector-icons'
