@@ -1,5 +1,6 @@
 // RootNavigation.js
-
+// Code adapted from React Navigation Documentation
+// https://reactnavigation.org/docs/navigating-without-navigation-prop/
 import { createNavigationContainerRef } from '@react-navigation/native'
 
 export const navigationRef = createNavigationContainerRef()
