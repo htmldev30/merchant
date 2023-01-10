@@ -1,5 +1,5 @@
-# Code Adapted from NativeBase Documentation example
-# https://docs.nativebase.io/customizing-theme
+//Code Adapted from NativeBase Documentation example
+//https://docs.nativebase.io/customizing-theme
 import React from 'react'
 import AuthenticationProvider from './hooks/context/AuthenticationProvider'
 import { NativeBaseProvider, extendTheme } from 'native-base'

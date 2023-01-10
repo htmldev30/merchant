@@ -1,5 +1,5 @@
-# Code adapted from Elijah Trillionz Dev.to Tutorial Article
-# https://dev.to/elijahtrillionz/complete-guide-on-how-to-use-styled-components-in-react-360c
+//Code adapted from Elijah Trillionz Dev.to Tutorial Article
+//https://dev.to/elijahtrillionz/complete-guide-on-how-to-use-styled-components-in-react-360c
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'

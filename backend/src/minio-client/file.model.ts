@@ -1,3 +1,5 @@
+// Code adapted from Edmar Diaz Medium Tutorial Article
+// https://dev.to/efd1006/fileupload-with-nestjs-using-minio-2f44
 export interface BufferedFile {
     fieldname: string
     originalname: string

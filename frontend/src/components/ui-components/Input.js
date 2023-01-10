@@ -1,5 +1,5 @@
-# Code adapted from NativeBase documentation example 
-# https://docs.nativebase.io/input
+//Code adapted from NativeBase documentation example 
+//https://docs.nativebase.io/input
 import React, { forwardRef } from 'react'
 import { Input } from 'native-base'
 export const C_Input = forwardRef(

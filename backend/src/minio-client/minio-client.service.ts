@@ -1,3 +1,5 @@
+// Code adapted from Rubin's Medium Article Tutorial
+// https://dev.to/rubiin/getting-started-with-minio-on-nestjs-3mg5
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common'
 import { MinioService } from 'nestjs-minio-client'
 import { BufferedFile } from './file.model'

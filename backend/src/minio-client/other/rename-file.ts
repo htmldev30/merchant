@@ -1,3 +1,5 @@
+// Code adapted from educative.io article example 
+// https://www.educative.io/answers/what-is-node-cryptocreatehashalgorithm-options
 import * as crypto from 'crypto'
 export const renameFile = (file) => {
     const timestamp = Date.now().toString()

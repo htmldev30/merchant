@@ -1,5 +1,5 @@
-# Code adapted from React-Navigation Documentation Example
-# https://reactnavigation.org/docs/function-after-focusing-screen/
+//Code adapted from React-Navigation Documentation Example
+//https://reactnavigation.org/docs/function-after-focusing-screen/
 import React, { useContext } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Icon } from 'native-base'

@@ -1,3 +1,5 @@
+// Minio part of code adapted from GitHub user djedlajn's package nestjs-minio-client under the MIT License
+// https://github.com/djedlajn/nestjs-minio-client
 import {
     Module,
     NestModule,
