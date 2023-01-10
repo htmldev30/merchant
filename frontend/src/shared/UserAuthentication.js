@@ -1,3 +1,5 @@
+// Code adapted from Expo SecureStore documentation 
+// https://docs.expo.dev/versions/latest/sdk/securestore/
 import * as SecureStore from 'expo-secure-store'
 
 export const save = async (key, value) => {
