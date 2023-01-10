@@ -1,3 +1,5 @@
+# Multiple image selection part of code adapted from GitHub user MonstroDev's expo-image-picker-multiple package example
+# https://github.com/MonstroDev/expo-image-picker-multiple
 import React, { useState, useEffect, useContext } from 'react'
 import {
     Keyboard,
